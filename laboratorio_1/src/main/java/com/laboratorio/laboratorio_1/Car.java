@@ -7,10 +7,9 @@ public class Car {
     private String color;
     private LocalDateTime entryTime;
 
-    public Car(String licensePlate, String color, LocalDateTime entryTime) {
+    public Car(String licensePlate, String color) {
         this.licensePlate = licensePlate;
         this.color = color;
-        this.entryTime = entryTime;
     }
 
     public String getLicensePlate() {

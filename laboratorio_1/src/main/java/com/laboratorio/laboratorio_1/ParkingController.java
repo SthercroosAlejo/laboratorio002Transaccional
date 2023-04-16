@@ -60,6 +60,18 @@ public class ParkingController {
     //Deleted car by license plate
 
     //Post entry time
+    @PostMapping("/cars/{licensePlate}/entry")
+	public ResponseEntity<Void> registerEntry (@PathVariable String licensePlate){
+		Car car = new Car(licensePlate, null);
+		this.parkingService.parkCar(car);
+		return ResponseEntity.status(HttpStatus.CREATED).build();
+	}
 
     //Post exit time
+	@PostMapping("/cars/{licensePlate}/exit")
+	public ResponseEntity<Double> registerExit(@PathVariable String licensePlate){
+		double fee = this.parkingService.calculateParkingFee(licensePlate);
+		this.parkingService.unparkCar(licensePlate);
+		return ResponseEntity.ok(fee);
+	}
 }
