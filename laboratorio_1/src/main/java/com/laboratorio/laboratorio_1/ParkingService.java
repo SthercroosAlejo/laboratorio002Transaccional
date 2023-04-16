@@ -39,22 +39,33 @@ public class ParkingService {
         return this.parkingLot.removeIf(car -> car.getLicensePlate().equals(licensePlate));
     }
 
-    public void parkCar(Car car){
-        car.setEntryTime(LocalDateTime.now());
-        addCar(car);
-    }
-
-    public void unparkCar(String licensePlate){
-        removeCarByLicensePlate(licensePlate);
-    }
-
-    public double calculateParkingFee(String licensePlate){
-        Optional<Car> optionalCar = getCarByLicensePlate(licensePlate);
+    public void parkCar(Car car) {
+        Optional<Car> optionalCar = getCarByLicensePlate(car.getLicensePlate());
         if(optionalCar.isPresent()){
+            optionalCar.get().setEntryTime(LocalDateTime.now());
+        }
+        // car.setEntryTime(LocalDateTime.now());
+        // addCar(car);
+    }
+
+    public void unparkCar(String licensePlate) {
+        Optional<Car> optionalCar = getCarByLicensePlate(licensePlate);
+        if (optionalCar.isPresent()) {
+            Car car = optionalCar.get();
+            LocalDateTime exitTime = LocalDateTime.now();
+            car.setExitTime(exitTime);
+            // removeCarByLicensePlate(licensePlate);
+        }
+    }
+
+    public double calculateParkingFee(String licensePlate) {
+        Optional<Car> optionalCar = getCarByLicensePlate(licensePlate);
+        if (optionalCar.isPresent()) {
             Car car = optionalCar.get();
             LocalDateTime entryTime = car.getEntryTime();
-            if(entryTime != null){
-                Long hoursParked = ChronoUnit.HOURS.between(entryTime, LocalDateTime.now());
+            LocalDateTime exitTime = car.getExitTime();
+            if (entryTime != null && exitTime != null) {
+                Long hoursParked = ChronoUnit.HOURS.between(entryTime, exitTime);
                 return hoursParked * HourlyRate;
             }
         }

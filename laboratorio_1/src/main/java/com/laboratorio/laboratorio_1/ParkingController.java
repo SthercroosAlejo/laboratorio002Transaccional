@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.List;
 import java.util.Optional;
@@ -58,6 +58,14 @@ public class ParkingController {
 	}
 
     //Deleted car by license plate
+	@DeleteMapping("/cars/{licensePlate}")
+	public ResponseEntity<Void> removeCarByLicensePlata(@PathVariable String licensePlate){
+		boolean removed = this.parkingService.removeCarByLicensePlate(licensePlate);
+		if(removed){
+			return ResponseEntity.ok().build();
+		}
+		return ResponseEntity.notFound().build();
+	}
 
     //Post entry time
     @PostMapping("/cars/{licensePlate}/entry")
