@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
+import java.util.Optional;
 
 // handler de la API
 @RestController
@@ -23,6 +25,14 @@ public class ParkingController {
 	}
 
     //Get car by license plate
+	@GetMapping("/cars/{licensePlate}")
+	public ResponseEntity<Car> getCarByLicensePlate(@PathVariable String licensePlate){
+		Optional<Car> optinalCar = this.parkingService.getCarByLicensePlate(licensePlate);
+		if(optinalCar.isPresent()){
+			return ResponseEntity.ok(optinalCar.get());
+		}
+		return ResponseEntity.notFound().build();
+	}
 
     //Get car by color
 
